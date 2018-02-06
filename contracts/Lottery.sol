@@ -61,6 +61,9 @@ contract Lottery is Ownable {
         players[++counter] = msg.sender;
         winningAmount += msg.value;
         playerAddresses[msg.sender] = true;
+        if (availTickets == 0) {
+            gameStatus = false;
+        }
     }
 
     /** @dev getter function for gameStatus.
