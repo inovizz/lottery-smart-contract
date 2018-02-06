@@ -1,8 +1,10 @@
 pragma solidity 0.4.18;
 
+import "./helper_contracts/zeppelin/Ownable.sol";
+
 
 /** @title Ethereum Lottery Smart Contract. */
-contract Lottery {
+contract Lottery is Ownable {
     uint internal numTickets;
     uint internal availTickets;
     uint internal ticketPrice;
@@ -27,12 +29,19 @@ contract Lottery {
       * @param tickets - no of max tickets.
       * @param price - price of the ticket.
     */
-    function startLottery(uint tickets, uint price) public payable {
+    function startLottery(uint tickets, uint price) public payable onlyOwner {
         numTickets = tickets;
         ticketPrice = price;
         availTickets = numTickets - 1;
         players[++counter] = msg.sender;
         winningAmount += msg.value;
         gameStatus = true;
+    }
+
+    /** @dev getter function for gameStatus.
+      * @return gameStatus - current status of lottery game.
+    */
+    function getGameStatus() public view returns(bool) {
+        return gameStatus;
     }
 }
