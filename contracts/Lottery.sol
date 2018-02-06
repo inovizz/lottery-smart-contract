@@ -65,14 +65,7 @@ contract Lottery is Ownable {
         winningAmount += msg.value;
         playerAddresses[msg.sender] = true;
         if (availTickets == 0) {
-            gameStatus = false;
-        }
-        if (!gameStatus) {
-            winningAmount = 0;
-            numTickets = 0;
-            availTickets = 0;
-            ticketPrice = 0;
-            counter = 0;
+            resetLottery();
         }
     }
 
@@ -81,5 +74,22 @@ contract Lottery is Ownable {
     */
     function getGameStatus() public view returns(bool) {
         return gameStatus;
+    }
+
+    /** @dev endLottery function.
+    */
+    function endLottery() public {
+        resetLottery();
+    }
+    
+    /** @dev resetLotter function.
+    */
+    function resetLottery() internal {
+        gameStatus = false;
+        winningAmount = 0;
+        numTickets = 0;
+        availTickets = 0;
+        ticketPrice = 0;
+        counter = 0;
     }
 }
