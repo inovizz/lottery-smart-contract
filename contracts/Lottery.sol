@@ -15,7 +15,7 @@ contract Lottery is Ownable {
     mapping (uint => address) internal players;
     mapping (address => bool) internal playerAddresses;
 
-    event Winner(uint indexed counter, address indexed winner, string mesg); 
+    event Winner(uint indexed counter, address winner, string mesg); 
 
     /** @dev returns the Lotter status.
       * @return numTickets The total # of lottery tickets.
@@ -92,6 +92,7 @@ contract Lottery is Ownable {
         uint winnerIndex = getRandomNumber();
         address winnerAddress = players[winnerIndex];
         Winner(winnerIndex, winnerAddress, "Winner Found!");
+        winnerAddress.transfer(winningAmount);
     }
 
     /** @dev resetLotter function.
