@@ -152,5 +152,16 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, true);
             assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
         });
+        it('Shall find the winner when game ends', async function () {
+            await lottery.startLottery(5, 100, { value: 100 });
+            await lottery.playLottery({ value: 100, from: accounts[1] });
+            await lottery.playLottery({ value: 100, from: accounts[2] });
+            await lottery.playLottery({ value: 100, from: accounts[3] });
+            await lottery.playLottery({ value: 100, from: accounts[4] });
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            let res = await lottery.getWinner();
+            assert.isAddress(res.logs[0].args.winner);
+            assert.equal(res.logs[0].args.mesg.valueOf(), 'Winner Found!');
+        });
     });
 });
