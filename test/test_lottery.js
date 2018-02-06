@@ -32,5 +32,10 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, true);
             assert.equal(winningAmount, 100);
             });
+        it('shall not allow non owner to create the lottery', async function () {
+            await expectThrow(lottery.startLottery(10, 100, { from: accounts[1], value: 100 }));
+            let gameStatus = await lottery.getGameStatus();
+            assert.equal(gameStatus, false);
+        });
     });
 });
