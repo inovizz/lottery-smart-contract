@@ -161,5 +161,21 @@ contract('Lottery', function (accounts) {
             assert.isAddress(res.logs[0].args.winner);
             assert.equal(res.logs[0].args.mesg.valueOf(), 'Winner Found!');
         });
+        it('Shall transfer the winningAmount to the winner', async function () {
+            let ownerBal1 = await web3.eth.getBalance(accounts[0]);
+            let playerBal1 = await web3.eth.getBalance(accounts[1]);
+            await lottery.startLottery(2, 100, { value: 100 });
+            let res = await lottery.playLottery({ value: 100, from: accounts[1] });
+            assert.isAddress(res.logs[0].args.winner);
+            assert.equal(res.logs[0].args.mesg.valueOf(), 'Winner Found!');
+            if (res.logs[0].args.winner == accounts[0]) {
+                let ownerBal2 = await web3.eth.getBalance(accounts[0]);
+                assert.isAtMost(ownerBal2.minus(ownerBal1), 100)
+            }
+            if (res.logs[0].args.winner == accounts[1]) {
+                let playerBal2 = await web3.eth.getBalance(accounts[1]);
+                assert.isAtMost(playerBal2.minus(playerBal1), 100)
+            }
+        });
     });
 });
