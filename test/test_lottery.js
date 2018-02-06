@@ -157,9 +157,7 @@ contract('Lottery', function (accounts) {
             await lottery.playLottery({ value: 100, from: accounts[1] });
             await lottery.playLottery({ value: 100, from: accounts[2] });
             await lottery.playLottery({ value: 100, from: accounts[3] });
-            await lottery.playLottery({ value: 100, from: accounts[4] });
-            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
-            let res = await lottery.getWinner();
+            let res = await lottery.playLottery({ value: 100, from: accounts[4] });
             assert.isAddress(res.logs[0].args.winner);
             assert.equal(res.logs[0].args.mesg.valueOf(), 'Winner Found!');
         });
