@@ -46,6 +46,7 @@ contract Lottery is Ownable {
         players[++counter] = owner;
         winningAmount += msg.value;
         gameStatus = true;
+        playerAddresses[owner] = true;
     }
 
     /** @dev play lottery game. */
