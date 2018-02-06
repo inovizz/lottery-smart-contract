@@ -81,5 +81,15 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, true);
             assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
         });
+        it('Should not allow owner to buy multiple tickets', async function () {
+            await lottery.startLottery(10, 100, { value: 100 });
+            await expectThrow(lottery.playLottery({value: 100}));
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 10);
+            assert.equal(ticketPrice, 100);
+            assert.equal(availableTickets, 9);
+            assert.equal(gameStatus, true);
+            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+        });
     });
 });
