@@ -91,5 +91,15 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, true);
             assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
         });
+        it('Should end the game when tickets are sold out', async function () {
+            await lottery.startLottery(2, 100, { value: 100 });
+            await lottery.playLottery({value: 100, from: accounts[1]});
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 2);
+            assert.equal(ticketPrice, 100);
+            assert.equal(availableTickets, 0);
+            assert.equal(gameStatus, false);
+            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+        });
     });
 });
