@@ -37,5 +37,10 @@ contract('Lottery', function (accounts) {
             let gameStatus = await lottery.getGameStatus();
             assert.equal(gameStatus, false);
         });
+        it('shall not allow owner to create the lottery with 1 ticket and 0 price', async function () {
+            await expectThrow(lottery.startLottery(1, 0, { value: 100 }));
+            let gameStatus = await lottery.getGameStatus();
+            assert.equal(gameStatus, false);
+        });
     });
 });
