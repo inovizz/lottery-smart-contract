@@ -69,6 +69,10 @@ contract Lottery is Ownable {
         }
         if (!gameStatus) {
             winningAmount = 0;
+            numTickets = 0;
+            availTickets = 0;
+            ticketPrice = 0;
+            counter = 0;
         }
     }
 
