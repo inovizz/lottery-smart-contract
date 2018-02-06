@@ -57,6 +57,9 @@ contract Lottery is Ownable {
         if (msg.value < ticketPrice) {
             revert();
         }
+        if (!gameStatus) {
+            revert();
+        }
         availTickets = availTickets - 1;
         players[++counter] = msg.sender;
         winningAmount += msg.value;
