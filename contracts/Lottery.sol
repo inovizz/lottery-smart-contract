@@ -30,10 +30,16 @@ contract Lottery is Ownable {
       * @param price - price of the ticket.
     */
     function startLottery(uint tickets, uint price) public payable onlyOwner {
+        if (tickets <= 1) {
+            revert();
+        }
+        if (price == 0) {
+            revert();
+        }
         numTickets = tickets;
         ticketPrice = price;
         availTickets = numTickets - 1;
-        players[++counter] = msg.sender;
+        players[++counter] = owner;
         winningAmount += msg.value;
         gameStatus = true;
     }
