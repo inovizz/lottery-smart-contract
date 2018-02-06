@@ -47,6 +47,13 @@ contract Lottery is Ownable {
         gameStatus = true;
     }
 
+    /** @dev play lottery game. */
+    function playLottery() public payable {
+        availTickets = availTickets - 1;
+        players[++counter] = msg.sender;
+        winningAmount += msg.value;
+    }
+
     /** @dev getter function for gameStatus.
       * @return gameStatus - current status of lottery game.
     */

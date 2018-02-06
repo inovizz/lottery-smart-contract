@@ -60,5 +60,15 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, true);
             assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
         });
+        it('Should not allow Player to play lottery with out sending correct ticket price', async function () {
+            await lottery.startLottery(10, 100, { value: 100 });
+            await expectThrow(lottery.playLottery({value: 99, from: accounts[1]}));
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 10);
+            assert.equal(ticketPrice, 100);
+            assert.equal(availableTickets, 9);
+            assert.equal(gameStatus, true);
+            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+        });
     });
 });
