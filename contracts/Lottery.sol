@@ -78,7 +78,7 @@ contract Lottery is Ownable {
 
     /** @dev endLottery function.
     */
-    function endLottery() public {
+    function endLottery() public onlyOwner {
         resetLottery();
     }
     
