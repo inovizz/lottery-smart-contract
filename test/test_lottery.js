@@ -123,4 +123,25 @@ contract('Lottery', function (accounts) {
             assert.equal(winningAmount, 0);
         });
     });
+    describe('End Lottery', function () {
+        it('Should allow owner to end the lottery even before game ends', async function () {
+            await lottery.startLottery(3, 100, { value: 100 });
+            await lottery.playLottery({value: 100, from: accounts[1]});
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 3);
+            assert.equal(ticketPrice, 100);
+            assert.equal(availableTickets, 1);
+            assert.equal(gameStatus, true);
+            assert.isAtLeast(winningAmount, (tickets-availableTickets)*ticketPrice);
+            await lottery.endLottery();
+            [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 0);
+            assert.equal(ticketPrice, 0);
+            assert.equal(availableTickets, 0);
+            assert.equal(gameStatus, false);
+            assert.equal(winningAmount, 0);
+
+
+        });
+    });
 });
