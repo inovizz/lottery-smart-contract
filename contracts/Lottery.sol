@@ -15,6 +15,8 @@ contract Lottery is Ownable {
     mapping (uint => address) internal players;
     mapping (address => bool) internal playerAddresses;
 
+    event Winner(uint indexed counter, address indexed winner, string mesg); 
+
     /** @dev returns the Lotter status.
       * @return numTickets The total # of lottery tickets.
       * @return availTickets The # of available tickets.
@@ -82,14 +84,33 @@ contract Lottery is Ownable {
         resetLottery();
     }
     
+    /** @dev getWinner function.
+      * this calls getRandomNumber function and
+      * finds the winner using players mapping
+    */
+    function getWinner() internal {
+        uint winnerIndex = getRandomNumber();
+        address winnerAddress = players[winnerIndex];
+        Winner(winnerIndex, winnerAddress, "Winner Found!");
+    }
+
+    /** @dev resetLotter function.
+    */
+    function getRandomNumber() internal view returns(uint) {
+        uint random = uint(block.blockhash(block.number-1))%counter + 1;
+        return random;
+    }
+
     /** @dev resetLotter function.
     */
     function resetLottery() internal {
         gameStatus = false;
+        getWinner();
         winningAmount = 0;
         numTickets = 0;
         availTickets = 0;
         ticketPrice = 0;
         counter = 0;
     }
+
 }
