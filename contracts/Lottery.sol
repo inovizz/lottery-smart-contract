@@ -67,6 +67,9 @@ contract Lottery is Ownable {
         if (availTickets == 0) {
             gameStatus = false;
         }
+        if (!gameStatus) {
+            winningAmount = 0;
+        }
     }
 
     /** @dev getter function for gameStatus.
