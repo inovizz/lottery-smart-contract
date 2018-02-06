@@ -48,4 +48,17 @@ contract('Lottery', function (accounts) {
             assert.equal(gameStatus, false);
         });
     });
+
+    describe('Play Lottery', function () {
+        it('Should allow Player to play lottery', async function () {
+            await lottery.startLottery(10, 100, { value: 100 });
+            await lottery.playLottery({value: 100, from: accounts[1]});
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 10);
+            assert.equal(ticketPrice, 100);
+            assert.equal(availableTickets, 8);
+            assert.equal(gameStatus, true);
+            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+        });
+    });
 });
