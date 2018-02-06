@@ -49,13 +49,7 @@ contract Lottery is Ownable {
       * @param price - price of the ticket.
      */
     function startLottery(uint tickets, uint price) public payable onlyOwner {
-        if (tickets <= 1) {
-            revert();
-        }
-        if (price == 0) {
-            revert();
-        }
-        if (msg.value < price) {
+        if ((tickets <= 1) || (price == 0) || (msg.value < price)) {
             revert();
         }
         numTickets = tickets;
@@ -73,16 +67,10 @@ contract Lottery is Ownable {
       * when all tickets are sold out.
      */
     function playLottery() public payable {
-        // revert in case user already has bought a ticket.
-        if (playerAddresses[msg.sender]) {
-            revert();
-        }
-        // revert incase value sent is less than the ticket price.
-        if (msg.value < ticketPrice) {
-            revert();
-        }
-        // revert in case gameStatus is false
-        if (!gameStatus) {
+        // revert in case user already has bought a ticket OR,
+        // value sent is less than the ticket price OR,
+        // gameStatus is false.
+        if ((playerAddresses[msg.sender]) || (msg.value < ticketPrice) || (!gameStatus)) {
             revert();
         }
         availTickets = availTickets - 1;
