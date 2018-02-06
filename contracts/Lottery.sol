@@ -13,6 +13,7 @@ contract Lottery is Ownable {
     uint internal counter;
 
     mapping (uint => address) internal players;
+    mapping (address => bool) internal playerAddresses;
 
     /** @dev returns the Lotter status.
       * @return numTickets The total # of lottery tickets.
@@ -49,12 +50,16 @@ contract Lottery is Ownable {
 
     /** @dev play lottery game. */
     function playLottery() public payable {
+        if (playerAddresses[msg.sender]) {
+            revert();
+        }
         if (msg.value < ticketPrice) {
             revert();
         }
         availTickets = availTickets - 1;
         players[++counter] = msg.sender;
         winningAmount += msg.value;
+        playerAddresses[msg.sender] = true;
     }
 
     /** @dev getter function for gameStatus.
