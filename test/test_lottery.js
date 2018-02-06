@@ -95,8 +95,8 @@ contract('Lottery', function (accounts) {
             await lottery.startLottery(2, 100, { value: 100 });
             await lottery.playLottery({value: 100, from: accounts[1]});
             let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
-            assert.equal(tickets, 2);
-            assert.equal(ticketPrice, 100);
+            assert.equal(tickets, 0);
+            assert.equal(ticketPrice, 0);
             assert.equal(availableTickets, 0);
             assert.equal(gameStatus, false);
             assert.isAtLeast(winningAmount, 0);
@@ -106,8 +106,18 @@ contract('Lottery', function (accounts) {
             await lottery.playLottery({value: 100, from: accounts[1]});
             await expectThrow(lottery.playLottery({ value: 100, from: accounts[2] }));
             let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
-            assert.equal(tickets, 2);
-            assert.equal(ticketPrice, 100);
+            assert.equal(tickets, 0);
+            assert.equal(ticketPrice, 0);
+            assert.equal(availableTickets, 0);
+            assert.equal(gameStatus, false);
+            assert.equal(winningAmount, 0);
+        });
+        it('Shall reset the ticket price and #tickets when game is ended', async function () {
+            await lottery.startLottery(2, 100, { value: 100 });
+            await lottery.playLottery({value: 100, from: accounts[1]});
+            let [tickets, availableTickets, ticketPrice, gameStatus, winningAmount] = await lottery.getLotteryStatus();
+            assert.equal(tickets, 0);
+            assert.equal(ticketPrice, 0);
             assert.equal(availableTickets, 0);
             assert.equal(gameStatus, false);
             assert.equal(winningAmount, 0);
