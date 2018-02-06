@@ -49,6 +49,9 @@ contract Lottery is Ownable {
 
     /** @dev play lottery game. */
     function playLottery() public payable {
+        if (msg.value < ticketPrice) {
+            revert();
+        }
         availTickets = availTickets - 1;
         players[++counter] = msg.sender;
         winningAmount += msg.value;
