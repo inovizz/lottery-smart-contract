@@ -99,9 +99,9 @@ contract('Lottery', function (accounts) {
             assert.equal(ticketPrice, 100);
             assert.equal(availableTickets, 0);
             assert.equal(gameStatus, false);
-            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+            assert.isAtLeast(winningAmount, 0);
         });
-        it('Should not allow players to buy tickets when game is ended', async function () {
+        it('Should not allow players to buy tickets when game is ended and set winning amount to zero', async function () {
             await lottery.startLottery(2, 100, { value: 100 });
             await lottery.playLottery({value: 100, from: accounts[1]});
             await expectThrow(lottery.playLottery({ value: 100, from: accounts[2] }));
@@ -110,7 +110,7 @@ contract('Lottery', function (accounts) {
             assert.equal(ticketPrice, 100);
             assert.equal(availableTickets, 0);
             assert.equal(gameStatus, false);
-            assert.isAtLeast(winningAmount, (tickets - availableTickets) * ticketPrice);
+            assert.equal(winningAmount, 0);
         });
     });
 });
